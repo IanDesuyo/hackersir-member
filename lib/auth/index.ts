@@ -8,6 +8,7 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 
 import { env } from "@/lib/env.mjs";
+import { cache } from "react";
 
 export const authProviders = [
   GooglePrivider({
@@ -67,9 +68,9 @@ export const authOptions: NextAuthOptions = {
   },
 };
 
-export const getServerSession = () => {
+export const getServerSession = cache(() => {
   return getNextAuthServerSession(authOptions);
-};
+});
 
 const getSessionMemberStatus = async (session: Session) => {
   const CURRENT_YEAR = await prisma.setting
