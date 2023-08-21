@@ -8,8 +8,8 @@ export default async function MemberProfilePage({ params: { userId } }: { params
   const api = await getApi();
 
   const [profile, studentData] = await Promise.all([
-    api.member.getProfile({ userId }),
-    api.member.getStudentData({ userId }),
+    api.member.getProfileById({ userId }),
+    api.member.getStudentDataById({ userId }),
   ]);
 
   if (!profile) {

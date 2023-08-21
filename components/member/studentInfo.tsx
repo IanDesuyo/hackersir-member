@@ -15,7 +15,7 @@ import { studentDataFormSchema } from "@/lib/schemas/member";
 
 type StudentDataProps = {
   userId: "me" | string;
-  initialData: RouterOutputs["member"]["getStudentData"];
+  initialData: RouterOutputs["member"]["getStudentDataById"];
 };
 
 const StudentData: React.FC<StudentDataProps> = ({ userId, initialData }) => {
@@ -24,7 +24,7 @@ const StudentData: React.FC<StudentDataProps> = ({ userId, initialData }) => {
     defaultValues: initialData ?? {},
   });
 
-  const studentDataMutation = api.member.updateStudentData.useMutation();
+  const studentDataMutation = api.member.updateStudentDataById.useMutation();
 
   const onSubmit = (data: z.infer<typeof studentDataFormSchema>) => {
     return studentDataMutation.mutateAsync({ userId, ...data });

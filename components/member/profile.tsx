@@ -16,7 +16,7 @@ import { profileFormSchema } from "@/lib/schemas/member";
 
 type MemberProfileProps = {
   userId: "me" | string;
-  initialData: NonNullable<RouterOutputs["member"]["getProfile"]>;
+  initialData: NonNullable<RouterOutputs["member"]["getProfileById"]>;
 };
 
 const MemberProfile: React.FC<MemberProfileProps> = ({ userId, initialData }) => {
@@ -25,7 +25,7 @@ const MemberProfile: React.FC<MemberProfileProps> = ({ userId, initialData }) =>
     defaultValues: initialData,
   });
 
-  const profileMutation = api.member.updateProfile.useMutation();
+  const profileMutation = api.member.updateProfileById.useMutation();
 
   const onSubmit = (data: z.infer<typeof profileFormSchema>) => {
     return profileMutation.mutateAsync({ userId, name: data.name });

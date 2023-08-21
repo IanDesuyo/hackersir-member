@@ -1,10 +1,10 @@
 import { createTRPCRouter, authenticatedProcedure, convertMeToUserId } from "..";
 import { authProviders } from "@/lib/auth";
 import * as schema from "@/lib/schemas/member";
-import { Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 
 export const memberRouter = createTRPCRouter({
-  getProfile: authenticatedProcedure
+  getProfileById: authenticatedProcedure
     .input(schema.userIdInput)
     .use(convertMeToUserId)
     .query(async ({ ctx, input }) => {
@@ -38,7 +38,7 @@ export const memberRouter = createTRPCRouter({
       return { ...user, accounts };
     }),
 
-  updateProfile: authenticatedProcedure
+  updateProfileById: authenticatedProcedure
     .input(schema.updateProfileInput)
     .use(convertMeToUserId)
     .mutation(async ({ ctx, input }) => {
@@ -54,7 +54,7 @@ export const memberRouter = createTRPCRouter({
       return { success: !!user, updatedAt: user.updatedAt };
     }),
 
-  getStudentData: authenticatedProcedure
+  getStudentDataById: authenticatedProcedure
     .input(schema.userIdInput)
     .use(convertMeToUserId)
     .query(async ({ ctx, input }) => {
@@ -67,7 +67,7 @@ export const memberRouter = createTRPCRouter({
       return student;
     }),
 
-  updateStudentData: authenticatedProcedure
+  updateStudentDataById: authenticatedProcedure
     .input(schema.updateStudentDataInput)
     .use(convertMeToUserId)
     .mutation(async ({ ctx, input }) => {
