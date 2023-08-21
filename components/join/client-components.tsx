@@ -5,6 +5,19 @@ import { ArticlesOfAssociation } from "./articlesOfAssociation";
 import { NonDisclosureAgreement } from "./nonDisclosureAgreement";
 import { Step } from "./step";
 import { Button } from "../ui/button";
+import { signIn } from "next-auth/react";
+import { api } from "@/lib/trpc/client";
+import { useRouter } from "next/navigation";
+
+export const Step1Login: React.FC = () => {
+  return (
+    <div className="grid grid-cols-2 gap-2">
+      <Button className="w-full" onClick={() => signIn()}>
+        登入
+      </Button>
+    </div>
+  );
+};
 
 export const Step3: React.FC = () => {
   const [status, setStatus] = useState({ aos: false, nda: false });
@@ -24,14 +37,33 @@ export const Step3: React.FC = () => {
   );
 };
 
-export const Step4: React.FC = () => {
-  return (
-    <Step step={4} title="送出入社申請 🥰" description="跨出最後一步!" isCompleted={false}>
-      <p>別忘記在新生茶會或社課時間來找我們完成入社喔~</p>
+export const Step4To5: React.FC = () => {
+  const router = useRouter();
 
-      <div className="grid grid-cols-2 gap-2 mt-4">
-        <Button>送出申請</Button>
-      </div>
-    </Step>
+  const applyMutation = api.join.apply.useMutation({
+    onSuccess: () => {
+      setTimeout(() => {
+        router.push("/join/success");
+      }, 3000);
+    },
+  });
+
+  return (
+    <>
+      <Step
+        step={4}
+        title="送出入社申請 🥰"
+        description="跨出最後一步!"
+        isCompleted={applyMutation.isLoading || applyMutation.isSuccess}
+      >
+        <p>別忘記在新生茶會或社課時間來找我們完成入社喔~</p>
+
+        <div className="grid grid-cols-2 gap-2 mt-4">
+          <Button onClick={() => applyMutation.mutate()}>送出申請</Button>
+        </div>
+      </Step>
+
+      <Step step={5} title="完成 🎉" description="喝罐快樂水爽一下吧" isCompleted={applyMutation.isSuccess} />
+    </>
   );
 };

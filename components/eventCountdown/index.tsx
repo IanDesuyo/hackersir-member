@@ -1,4 +1,4 @@
-import { createApi } from "@/lib/trpc/root";
+import { getApi } from "@/lib/trpc/root";
 import { type CSSProperties } from "react";
 
 type EventCountdownProps = {
@@ -6,8 +6,9 @@ type EventCountdownProps = {
 };
 
 export default async function EventCountdown({ id }: EventCountdownProps) {
-  const api = await createApi();
+  const api = await getApi();
 
-  const event = await api.event.findEventById(id);
-  
+  const event = await api.event.getById(id);
+
+  return <div></div>;
 }

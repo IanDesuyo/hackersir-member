@@ -2,23 +2,17 @@ import Link from "next/link";
 import { Step, StepWrapper } from "@/components/join/step";
 import { Button } from "@/components/ui/button";
 import { getServerSession } from "@/lib/auth";
-import { prisma } from "@/lib/db";
 import { FcuVerifyButton } from "../verifyButton";
-import { Step3, Step4 } from "./client-components";
+import { Step1Login, Step3, Step4To5 } from "./client-components";
+import { getApi } from "@/lib/trpc/root";
 
 const Steps: React.FC = async () => {
   // Step 1: Login
   const session = await getServerSession();
 
   // Step 2: Student Data
-  let studentData = null;
-  if (session) {
-    studentData = await prisma.studentData.findUnique({
-      where: {
-        userId: session?.user?.id,
-      },
-    });
-  }
+  const api = await getApi();
+  const studentData = await api.member.getStudentDataById({ userId: "me" });
 
   return (
     <StepWrapper>
@@ -31,11 +25,7 @@ const Steps: React.FC = async () => {
             <p>請繼續下一步！</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-2">
-            <Link href="/api/auth/signin?callback=/join">
-              <Button className="w-full">登入</Button>
-            </Link>
-          </div>
+          <Step1Login />
         )}
       </Step>
 
@@ -60,9 +50,7 @@ const Steps: React.FC = async () => {
 
       <Step3 />
 
-      <Step4 />
-
-      <Step step={5} title="完成 🎉" description="喝罐快樂水爽一下吧" isCompleted={false} />
+      <Step4To5 />
     </StepWrapper>
   );
 };
