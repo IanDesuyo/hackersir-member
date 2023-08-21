@@ -1,0 +1,3 @@
+.step[data-completed="false"] + .step[data-completed="false"] .content {
+  display: none;
+}
