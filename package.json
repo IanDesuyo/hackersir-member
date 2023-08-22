@@ -26,6 +26,7 @@
     "@types/react": "18.2.18",
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.14",
+    "canvas-confetti": "^1.6.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "eslint": "8.46.0",
@@ -47,6 +48,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@types/canvas-confetti": "^1.6.0",
     "prisma": "^5.1.1"
   }
 }

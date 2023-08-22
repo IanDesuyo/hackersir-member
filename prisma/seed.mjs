@@ -20,6 +20,11 @@ const ADMIN_EMAILS = ["fcuhackersir@mail.fcu.edu.tw"];
  */
 const SETTINGS = [
   {
+    id: "applicable",
+    value: "true",
+    description: "是否可以申請入社",
+  },
+  {
     id: "current_year",
     value: "2023",
     description: "當前年度, 等同於社員入社的年度",
@@ -59,7 +64,7 @@ for await (const email of ADMIN_EMAILS) {
   await prisma.user.upsert({
     where: { email },
     update: {
-      permission: 6 //Permission.AdminRead + Permission.AdminWrite,
+      permission: 6, //Permission.AdminRead + Permission.AdminWrite,
     },
     create: {
       email,

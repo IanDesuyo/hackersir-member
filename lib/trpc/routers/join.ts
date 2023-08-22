@@ -2,27 +2,22 @@ import { createTRPCRouter, publicProcedure, authenticatedProcedure } from "..";
 
 export const joinRouter = createTRPCRouter({
   getDetails: publicProcedure.query(async ({ ctx }) => {
-    const settings = await ctx.prisma.$transaction([
-      ctx.prisma.setting.findUniqueOrThrow({
-        where: {
-          id: "current_year",
-        },
-      }),
-      ctx.prisma.setting.findUniqueOrThrow({
-        where: {
-          id: "member_vaild_until",
-        },
-      }),
-      ctx.prisma.setting.findUniqueOrThrow({
-        where: {
-          id: "club_fee",
-        },
-      }),
-    ]);
+    console.log("getDetails");
 
-    const currentYear = parseInt(settings[0].value);
-    const memberVaildUntil = settings[1].value;
-    const clubFee = parseInt(settings[2].value);
+    const settings = await ctx.prisma.$transaction(
+      ["applicable", "current_year", "member_vaild_until", "club_fee"].map(id =>
+        ctx.prisma.setting.findUniqueOrThrow({
+          where: {
+            id,
+          },
+        })
+      )
+    );
+
+    const applicable = settings[0].value === "true";
+    const currentYear = parseInt(settings[1].value);
+    const memberVaildUntil = settings[2].value;
+    const clubFee = parseInt(settings[3].value);
 
     // Check if user is already a member
     let isMember = false;
@@ -39,6 +34,7 @@ export const joinRouter = createTRPCRouter({
     }
 
     return {
+      applicable,
       currentYear,
       memberVaildUntil,
       clubFee,

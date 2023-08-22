@@ -1,7 +1,10 @@
 import { type Metadata } from "next";
 import EventCountdown from "@/components/eventCountdown";
 import Steps from "@/components/join/steps";
-import JoinDetail from "@/components/join/detail";
+import { Terminal, TerminalLine } from "@/components/terminal";
+import { getApi } from "@/lib/trpc/root";
+import ErrorMessage from "@/components/error";
+import JoinSuccess from "@/components/join/success";
 
 export const metadata: Metadata = {
   title: "申請入社",
@@ -9,6 +12,17 @@ export const metadata: Metadata = {
 };
 
 export default async function JoinPage() {
+  const api = await getApi();
+  const joinDetails = await api.join.getDetails();
+
+  if (!joinDetails.applicable) {
+    return <ErrorMessage title="不開放申請入社" message="若有疑問請聯繫社團幹部" />;
+  }
+
+  if (joinDetails.isMember) {
+    return <JoinSuccess />;
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <div>
@@ -16,7 +30,11 @@ export default async function JoinPage() {
         <p className="text-sm text-neutral-500">想學習更多資安知識? 還在猶豫什麼, 趕緊的來加入我們!</p>
       </div>
 
-      <JoinDetail />
+      <Terminal>
+        <TerminalLine>cat README.md</TerminalLine>
+        <TerminalLine noPrompt>社員資格為一學年, 社費為 {joinDetails.clubFee} 元</TerminalLine>
+      </Terminal>
+
       <Steps />
       <EventCountdown id="welcome-party" />
     </div>

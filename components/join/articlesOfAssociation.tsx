@@ -36,7 +36,7 @@ export const ArticlesOfAssociation: React.FC<ArticlesOfAssociationProps> = ({ is
       </DialogTrigger>
       <DialogContent className="max-w-4xl">
         <DialogHeader>
-          <DialogTitle>逢甲大學黑客 社組織章程</DialogTitle>
+          <DialogTitle>逢甲大學黑客社 組織章程</DialogTitle>
         </DialogHeader>
 
         <div className="overflow-scroll max-h-[75vh] flex flex-col gap-8">

@@ -7,7 +7,7 @@ type TerminalProps = {
 
 export const Terminal: React.FC<TerminalProps> = ({ className, children }) => {
   return (
-    <div>
+    <>
       <input className="peer hidden" id="terminal" type="checkbox" />
       <div
         className={cn(
@@ -22,18 +22,25 @@ export const Terminal: React.FC<TerminalProps> = ({ className, children }) => {
         </div>
         <div className="mt-2">{children}</div>
       </div>
-    </div>
+    </>
   );
 };
 
 type TerminalLineProps = {
   noPrompt?: boolean;
-  children: React.ReactNode;
+  className?: string;
+  children?: React.ReactNode;
 };
 
-export const TerminalLine: React.FC<TerminalLineProps> = ({ noPrompt, children }) => {
+export const TerminalLine: React.FC<TerminalLineProps> = ({ noPrompt, className, children }) => {
   return (
-    <p className={cn("break-all", noPrompt || "before:text-green-400 before:pr-2 before:content-['hackersir~$']")}>
+    <p
+      className={cn(
+        "break-all",
+        className,
+        noPrompt || "before:text-green-400 before:pr-2 before:content-['hackersir~$']"
+      )}
+    >
       {children}
     </p>
   );
