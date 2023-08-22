@@ -4,7 +4,7 @@ import { atom, useAtom } from "jotai";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { Menu, User, CreditCard, LogOut } from "lucide-react";
+import Icons from "@/components/icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,7 +35,7 @@ const Nav: React.FC<NavProps> = ({ children }) => {
 
   return (
     <div className="flex container items-center gap-4 py-2 h-14">
-      <Menu className="md:hidden" onClick={() => setOpen(!open)} />
+      <Icons.Menu className="md:hidden" onClick={() => setOpen(!open)} />
       <Link href="/" id="brand" className="flex items-center gap-2 md:border-r-2 pr-4">
         <Image src="/static/images/logo.png" width={40} height={40} alt="logo" />
         <span className="text-xl">逢甲大學黑客社</span>
@@ -75,19 +75,19 @@ const NavUser: React.FC = () => {
 
           <Link href="/member/me/profile">
             <DropdownMenuItem>
-              <User className="mr-2 h-4 w-4" />
+              <Icons.User className="mr-2 h-4 w-4" />
               <span>個人檔案</span>
             </DropdownMenuItem>
           </Link>
           <DropdownMenuItem>
-            <CreditCard className="mr-2 h-4 w-4" />
+            <Icons.MemberCard className="mr-2 h-4 w-4" />
             <span>社員小卡</span>
           </DropdownMenuItem>
 
           <DropdownMenuSeparator />
 
           <DropdownMenuItem onClick={() => signOut()}>
-            <LogOut className="mr-2 h-4 w-4" />
+            <Icons.LogOut className="mr-2 h-4 w-4" />
             <span>登出</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
