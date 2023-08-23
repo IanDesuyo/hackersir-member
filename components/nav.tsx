@@ -79,10 +79,12 @@ const NavUser: React.FC = () => {
               <span>個人檔案</span>
             </DropdownMenuItem>
           </Link>
-          <DropdownMenuItem>
-            <Icons.MemberCard className="mr-2 h-4 w-4" />
-            <span>社員小卡</span>
-          </DropdownMenuItem>
+          <Link href="/member/me/card">
+            <DropdownMenuItem>
+              <Icons.MemberCard className="mr-2 h-4 w-4" />
+              <span>社員小卡</span>
+            </DropdownMenuItem>
+          </Link>
 
           <DropdownMenuSeparator />
 
