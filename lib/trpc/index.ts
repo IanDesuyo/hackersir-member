@@ -59,7 +59,7 @@ const enforceUserHasAdminWrite = t.middleware(({ ctx, next }) => {
 });
 export const adminWriteProcedure = t.procedure.use(enforceUserIsAuthed).use(enforceUserHasAdminWrite);
 
-export const convertMeToUserId = t.middleware(async ({ ctx, input, next }) => {
+export const convertMeToUserId = t.middleware(async ({ ctx, input, next, type }) => {
   const userId = (input as { userId?: string }).userId;
 
   if (!userId) {
@@ -71,7 +71,8 @@ export const convertMeToUserId = t.middleware(async ({ ctx, input, next }) => {
   }
 
   if (userId !== "me" && userId !== ctx.session.user.id) {
-    if (!hasPermissions(ctx.session, [Permission.AdminRead])) {
+    const permission = type === "query" ? Permission.AdminRead : Permission.AdminWrite;
+    if (!hasPermissions(ctx.session, [permission])) {
       throw new TRPCError({ code: "FORBIDDEN" });
     }
   }
