@@ -39,6 +39,11 @@ const SETTINGS = [
     value: "400",
     description: "社費",
   },
+  {
+    id: "president",
+    value: "喻唯甄",
+    description: "社長名稱, 顯示於匯款帳戶(逢甲大學黑客社XXX)",
+  },
 ];
 
 /**
@@ -55,8 +60,8 @@ const WELCOME_PARTY = {
   type: "活動",
   venue: "逢甲大學 資訊電機館 B22",
   links: "https://hackersir.kktix.cc/events/20220915for-beginners",
-  startAt: new Date("2023-09-15T19:00:00+08:00"),
-  endAt: new Date("2023-09-15T21:00:00+08:00"),
+  startAt: new Date("2023-09-14T19:00:00+08:00"),
+  endAt: new Date("2023-09-14T21:00:00+08:00"),
 };
 
 // insert data

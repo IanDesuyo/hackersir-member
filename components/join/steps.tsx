@@ -12,7 +12,10 @@ const Steps: React.FC = async () => {
 
   // Step 2: Student Data
   const api = await getApi();
-  const studentData = await api.member.getStudentDataById({ userId: "me" });
+  let studentData = null;
+  if (session) {
+    studentData = await api.member.getStudentDataById({ userId: "me" });
+  }
 
   return (
     <StepWrapper>
