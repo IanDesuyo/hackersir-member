@@ -3,7 +3,6 @@ import { Noto_Sans_TC } from "next/font/google";
 import { getServerSession } from "@/lib/auth";
 import AppProvider from "@/components/appProvider";
 import { Toaster } from "@/components/ui/toaster";
-import Nav from "@/components/nav";
 
 import "./globals.css";
 
@@ -15,8 +14,8 @@ const font = Noto_Sans_TC({
 
 export const metadata: Metadata = {
   title: {
-    default: "黑客社社員系統",
-    template: "%s | 黑客社社員系統",
+    default: "逢甲大學黑客社",
+    template: "%s | 逢甲大學黑客社",
   },
   colorScheme: "dark",
   themeColor: "#0a0a0a",
@@ -32,14 +31,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" className={font.className}>
       <body className="dark">
-        <AppProvider session={session}>
-          <div className="min-h-screen">
-            <header className="sticky top-0 z-40 w-full border-b bg-background">
-              <Nav />
-            </header>
-            <div className="container pt-4">{children}</div>
-          </div>
-        </AppProvider>
+        <AppProvider session={session}>{children}</AppProvider>
         <Toaster />
       </body>
     </html>

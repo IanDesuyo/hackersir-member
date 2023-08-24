@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import { Terminal, TerminalLine } from "@/components/terminal";
 import { getApi } from "@/lib/trpc/root";
 import Image from "next/image";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "活動列表",
+  description: "社團近期的活動資訊都在這裡!",
+};
 
 export default async function HomePage() {
   const api = await getApi();
