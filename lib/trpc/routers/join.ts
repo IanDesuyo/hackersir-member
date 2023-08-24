@@ -61,7 +61,7 @@ export const joinRouter = createTRPCRouter({
     const clubFee = parseInt(settings[2].value);
 
     if (!applicable) {
-      throw new Error("Membership is not applicable");
+      throw new TRPCError({ code: "BAD_REQUEST", message: "Not applicable" });
     }
 
     // Check user is already a member or not
@@ -93,13 +93,16 @@ export const joinRouter = createTRPCRouter({
       throw new TRPCError({ code: "BAD_REQUEST", message: "User has no student data" });
     }
 
-    const [memberData, receipt] = await ctx.prisma.$transaction(async prisma => {
+    const memberData = await ctx.prisma.$transaction(async prisma => {
       const receipt = await prisma.receipt.create({
         data: {
           userId: ctx.session.user.id,
           title: "逢甲大學黑客社 社費",
           amount: clubFee,
           bankLast5: input.paymentMethod === "bank_transfer" ? input.bankLast5 : null,
+        },
+        select: {
+          id: true,
         },
       });
 
@@ -109,11 +112,15 @@ export const joinRouter = createTRPCRouter({
           year: currentYear,
           receiptId: receipt.id,
         },
+        select: {
+          userId: true,
+          updatedAt: true,
+        },
       });
 
-      return [memberData, receipt];
+      return memberData;
     });
 
-    return { success: !!memberData, updatedAt: memberData.updatedAt };
+    return { success: !!memberData, userId: memberData.userId, updatedAt: memberData.updatedAt };
   }),
 });

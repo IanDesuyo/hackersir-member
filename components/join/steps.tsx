@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Step, StepWrapper } from "@/components/join/step";
 import { Button } from "@/components/ui/button";
 import { getServerSession } from "@/lib/auth";
-import { FcuVerifyButton } from "../verifyButton";
+import { FcuVerifyButton } from "../fcuVerifyButton";
 import { Step1Login, Step3, Step4To5 } from "./client-components";
 import { getApi } from "@/lib/trpc/root";
 
@@ -40,6 +40,13 @@ const Steps: React.FC = async () => {
           </p>
         ) : (
           <div>
+            <p>
+              本社將依照個人資料保護法、相關法規及學校相關法規進行處理以及利用，詳細請參閱
+              <Link href="/privacy" className="underline">
+                個資聲明
+              </Link>
+              。
+            </p>
             <p>逢甲大學學生請使用 NID 驗證, 或依照下方選項選擇</p>
             <div className="grid grid-cols-2 gap-2 mt-2">
               <FcuVerifyButton />

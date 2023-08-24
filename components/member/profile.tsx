@@ -43,7 +43,7 @@ const MemberProfile: React.FC<MemberProfileProps> = ({ userId, initialData }) =>
             <div className="grid grid-cols-1 gap-2">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex gap-4 flex-col md:flex-row">
-                  <Avatar className="w-32 h-auto aspect-square hover:scale-105 transition-all">
+                  <Avatar className="w-32 h-auto aspect-square hover:scale-105 transition-all self-center">
                     <AvatarFallback>{initialData.name}</AvatarFallback>
                     <AvatarImage src={initialData.image || "/static/images/default-avatar.png"} className="bg-white" />
                   </Avatar>
@@ -92,8 +92,8 @@ const MemberProfile: React.FC<MemberProfileProps> = ({ userId, initialData }) =>
             </div>
           </CardContent>
 
-          <CardFooter>
-            <p className="w-full flex justify-end text-sm text-muted-foreground">
+          <CardFooter className="w-full flex justify-end">
+            <p className="text-sm text-muted-foreground">
               *: 綁定 Discord 即可獲取
               <Link href="https://discord.com/invite/VCfC43Te3T">逢甲大學黑客社 交流群</Link>的社員身份組
             </p>

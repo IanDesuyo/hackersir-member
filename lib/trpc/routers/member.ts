@@ -55,9 +55,13 @@ export const memberRouter = createTRPCRouter({
         data: {
           name: input.name,
         },
+        select: {
+          id: true,
+          updatedAt: true,
+        },
       });
 
-      return { success: !!user, updatedAt: user.updatedAt };
+      return { success: !!user, userId: user.id, updatedAt: user.updatedAt };
     }),
 
   getStudentDataById: authenticatedProcedure
@@ -97,9 +101,13 @@ export const memberRouter = createTRPCRouter({
           userId: input.userId,
           ...data,
         },
+        select: {
+          userId: true,
+          updatedAt: true,
+        },
       });
 
-      return { success: !!student, updatedAt: student.updatedAt };
+      return { success: !!student, userId: student.userId, updatedAt: student.updatedAt };
     }),
 
   getStatusById: authenticatedProcedure
