@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Noto_Sans_TC } from "next/font/google";
 import { getServerSession } from "@/lib/auth";
 import AppProvider from "@/components/appProvider";
+import { Toaster } from "@/components/ui/toaster";
 import Nav from "@/components/nav";
 
 import "./globals.css";
@@ -39,6 +40,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             <div className="container pt-4">{children}</div>
           </div>
         </AppProvider>
+        <Toaster />
       </body>
     </html>
   );

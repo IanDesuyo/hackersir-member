@@ -13,6 +13,7 @@ import { signIn } from "next-auth/react";
 import { api } from "@/lib/trpc/client";
 import confetti, { type Options } from "canvas-confetti";
 import { cn } from "@/lib/utils";
+import { useToast } from "../ui/use-toast";
 
 export const Step1Login: React.FC = () => {
   return (
@@ -44,6 +45,7 @@ export const Step3: React.FC = () => {
 
 export const Step4To5: React.FC = () => {
   const router = useRouter();
+  const { toast } = useToast();
   const [isOpen, setOpen] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<string>();
   const [bankLast5, setBankLast5] = useState<string>();
@@ -64,7 +66,7 @@ export const Step4To5: React.FC = () => {
     } else if (paymentMethod === "bank_transfer" && bankLast5 && bankLast5.length >= 5) {
       applyMutation.mutate({ paymentMethod, bankLast5 });
     } else {
-      return alert("請填寫銀行後五碼"); // TODO: use toast
+      return toast({ title: "請填寫銀行後五碼", variant: "destructive" });
     }
 
     setOpen(false);
