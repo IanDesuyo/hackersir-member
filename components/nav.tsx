@@ -15,6 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 
 export const navAtom = atom({
   open: false,
@@ -33,18 +34,33 @@ const Nav: React.FC<NavProps> = ({ children }) => {
   const { data: session } = useSession();
   const [open, setOpen] = useAtom(openAtom);
 
+  const close = () => setOpen(false);
+
   return (
-    <div className="flex container items-center gap-4 py-2 h-14">
+    <div className="flex md:container px-2 md:px-auto items-center gap-4 py-2 h-14">
       <Icons.Menu className="md:hidden" onClick={() => setOpen(!open)} />
+
       <Link href="/" id="brand" className="flex items-center gap-2 md:border-r-2 pr-4">
         <Image src="/static/images/logo.png" width={40} height={40} alt="logo" />
         <span className="text-xl">逢甲大學黑客社</span>
       </Link>
 
-      <nav className="hidden md:flex items-center gap-4">
-        {!session?.member.active && <Link href="/join">加入我們</Link>}
-        <p>Item1</p>
-        <p>Item2</p>
+      <nav
+        className={cn(
+          "md:flex md:items-center md:gap-4 transition-all",
+          open ? "absolute top-14 left-0 w-full bg-background h-[calc(100vh-3.5rem)] p-4 flex flex-col gap-8" : "hidden"
+        )}
+      >
+        <Link href="/events" onClick={close}>
+          活動列表
+        </Link>
+
+        {!session?.member.active && (
+          <Link href="/join" onClick={close}>
+            加入我們
+          </Link>
+        )}
+
         {children}
       </nav>
 
