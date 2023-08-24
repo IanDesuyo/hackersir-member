@@ -33,7 +33,7 @@ export default async function EventCountdown({ id }: EventCountdownProps) {
       </TerminalLine>
 
       <TerminalLine noPrompt>
-        地點: {event.venue} | 時間: {event.startAt.toLocaleString()}
+        地點: {event.venue} | 時間: {event.startAt.toLocaleString("zh-TW")}
       </TerminalLine>
 
       <TerminalLine noPrompt className="text-sm">
