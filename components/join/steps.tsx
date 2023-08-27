@@ -50,7 +50,7 @@ const Steps: React.FC = async () => {
             <p>逢甲大學學生請使用 NID 驗證, 或依照下方選項選擇</p>
             <div className="grid grid-cols-2 gap-2 mt-2">
               <FcuVerifyButton />
-              <Link href="/member/me/profile#student-data">
+              <Link href="/members/me/profile#student-data">
                 <Button className="w-full">手動填寫</Button>
               </Link>
             </div>

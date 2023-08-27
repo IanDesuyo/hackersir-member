@@ -51,7 +51,7 @@ const JoinSuccess: React.FC = async () => {
       </div>
 
       <div className="flex gap-4">
-        <Link href="/member/me/card">
+        <Link href="/members/me/card">
           <IconButton icon="MemberCard">出示社員小卡</IconButton>
         </Link>
         <Link href="/events">

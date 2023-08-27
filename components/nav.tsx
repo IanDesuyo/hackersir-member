@@ -69,7 +69,7 @@ export const NavItem: React.FC<NavItemProps> = ({ href, children }) => {
   const close = () => setOpen(false);
 
   return (
-    <Link href={href} onClick={close}>
+    <Link href={href} onClick={close} className="hover:underline">
       {children}
     </Link>
   );
@@ -92,13 +92,13 @@ const NavUser: React.FC = () => {
 
           <DropdownMenuSeparator />
 
-          <Link href="/member/me/profile">
+          <Link href="/members/me/profile">
             <DropdownMenuItem>
               <Icons.User className="mr-2 h-4 w-4" />
               <span>個人檔案</span>
             </DropdownMenuItem>
           </Link>
-          <Link href="/member/me/card">
+          <Link href="/members/me/card">
             <DropdownMenuItem>
               <Icons.MemberCard className="mr-2 h-4 w-4" />
               <span>社員小卡</span>

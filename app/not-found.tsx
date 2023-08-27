@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import DefaultLayout from "@/components/layout";
+import DefaultLayout from "@/components/layout/default";
 import ErrorMessage from "@/components/error";
 
 export const metadata: Metadata = {
