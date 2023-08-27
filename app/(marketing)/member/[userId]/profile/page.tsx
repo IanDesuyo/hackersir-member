@@ -12,9 +12,10 @@ export const metadata: Metadata = {
 export default async function MemberProfilePage({ params: { userId } }: { params: { userId: string } }) {
   const api = await getApi();
 
-  const [profile, studentData] = await Promise.all([
+  const [profile, studentData, receipts] = await Promise.all([
     api.member.getProfileById({ userId }),
     api.member.getStudentDataById({ userId }),
+    api.receipt.getByUserId({ userId }),
   ]);
 
   if (!profile) {
@@ -25,7 +26,7 @@ export default async function MemberProfilePage({ params: { userId } }: { params
     <div className="flex flex-col gap-4">
       <MemberProfile userId={userId} initialData={profile} />
       <StudentData userId={userId} initialData={studentData} />
-      <MemberReceipt userId={userId} />
+      <MemberReceipt userId={userId} initialData={receipts} />
     </div>
   );
 }

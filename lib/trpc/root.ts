@@ -4,6 +4,7 @@ import { getServerSession } from "../auth";
 import { memberRouter } from "./routers/member";
 import { eventRouter } from "./routers/event";
 import { joinRouter } from "./routers/join";
+import { receiptRouter } from "./routers/receipt";
 import { cache } from "react";
 import { prisma } from "@/lib/db";
 
@@ -11,6 +12,7 @@ export const appRouter = createTRPCRouter({
   member: memberRouter,
   event: eventRouter,
   join: joinRouter,
+  receipt: receiptRouter,
 });
 
 export type AppRouter = typeof appRouter;
