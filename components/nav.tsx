@@ -2,7 +2,6 @@
 
 import { atom, useAtom } from "jotai";
 import { signIn, signOut, useSession } from "next-auth/react";
-import Image from "next/image";
 import Link from "next/link";
 import Icons from "@/components/icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -27,22 +26,20 @@ const openAtom = atom(
 );
 
 type NavProps = {
+  title?: string;
   children?: React.ReactNode;
 };
 
-const Nav: React.FC<NavProps> = ({ children }) => {
-  const { data: session } = useSession();
+const Nav: React.FC<NavProps> = ({ title = "逢甲大學黑客社", children }) => {
   const [open, setOpen] = useAtom(openAtom);
-
-  const close = () => setOpen(false);
 
   return (
     <div className="flex md:container px-2 md:px-auto items-center gap-4 py-2 h-14">
       <Icons.Menu className="md:hidden" onClick={() => setOpen(!open)} />
 
       <Link href="/" id="brand" className="flex items-center gap-2 md:border-r-2 pr-4">
-        <Image src="/static/images/logo.png" width={40} height={40} alt="logo" />
-        <span className="text-xl">逢甲大學黑客社</span>
+        <Icons.Logo width={40} height={40} />
+        <span className="text-xl">{title}</span>
       </Link>
 
       <nav
@@ -51,16 +48,6 @@ const Nav: React.FC<NavProps> = ({ children }) => {
           open ? "absolute top-14 left-0 w-full bg-background h-[calc(100vh-3.5rem)] p-4 flex flex-col gap-8" : "hidden"
         )}
       >
-        <Link href="/events" onClick={close}>
-          活動列表
-        </Link>
-
-        {!session?.member.active && (
-          <Link href="/join" onClick={close}>
-            加入我們
-          </Link>
-        )}
-
         {children}
       </nav>
 
@@ -71,6 +58,22 @@ const Nav: React.FC<NavProps> = ({ children }) => {
 };
 
 export default Nav;
+
+type NavItemProps = {
+  href: string;
+  children: React.ReactNode;
+};
+
+export const NavItem: React.FC<NavItemProps> = ({ href, children }) => {
+  const [open, setOpen] = useAtom(openAtom);
+  const close = () => setOpen(false);
+
+  return (
+    <Link href={href} onClick={close}>
+      {children}
+    </Link>
+  );
+};
 
 const NavUser: React.FC = () => {
   const { status, data: session } = useSession();
