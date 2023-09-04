@@ -83,13 +83,13 @@ export const joinRouter = createTRPCRouter({
     }
 
     // Check user has studentData
-    const c2 = await ctx.prisma.studentData.count({
+    const studentData = await ctx.prisma.studentData.findUnique({
       where: {
         userId: ctx.session.user.id,
       },
     });
 
-    if (c2 !== 1) {
+    if (!studentData) {
       throw new TRPCError({ code: "BAD_REQUEST", message: "User has no student data" });
     }
 
@@ -97,7 +97,7 @@ export const joinRouter = createTRPCRouter({
       const receipt = await prisma.receipt.create({
         data: {
           userId: ctx.session.user.id,
-          title: "逢甲大學黑客社 社費",
+          title: `${currentYear} 社費`,
           amount: clubFee,
           bankLast5: input.paymentMethod === "bank_transfer" ? input.bankLast5 : null,
         },

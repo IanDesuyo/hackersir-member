@@ -69,25 +69,27 @@ const MemberProfile: React.FC<MemberProfileProps> = ({ userId, initialData }) =>
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <p className="text-xl font-bold leading-none tracking-tight">綁定社群帳號</p>
-                  <p className="text-sm text-muted-foreground">
-                    綁定社群帳號可以使用社群帳號登入<span className="text-red-500">*</span>
-                  </p>
-                  <div className="flex flex-row gap-2 h-10">
-                    {initialData.accounts.map(account => (
-                      <Button
-                        key={account.provider}
-                        type="button"
-                        style={account.style}
-                        disabled={account.connected}
-                        onClick={() => signIn(account.id)}
-                      >
-                        {account.provider}
-                      </Button>
-                    ))}
+                {userId === "me" && (
+                  <div className="space-y-2">
+                    <p className="text-xl font-bold leading-none tracking-tight">綁定社群帳號</p>
+                    <p className="text-sm text-muted-foreground">
+                      綁定社群帳號可以使用社群帳號登入<span className="text-red-500">*</span>
+                    </p>
+                    <div className="flex flex-row gap-2 h-10">
+                      {initialData.accounts.map(account => (
+                        <Button
+                          key={account.provider}
+                          type="button"
+                          style={account.style}
+                          disabled={account.connected}
+                          onClick={() => signIn(account.id)}
+                        >
+                          {account.provider}
+                        </Button>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </CardContent>

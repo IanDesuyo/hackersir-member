@@ -67,7 +67,7 @@ const StudentData: React.FC<StudentDataProps> = ({ userId, initialData }) => {
             {initialData?.isVerified && !form.formState.isSubmitSuccessful ? ( // Because initialData won't be updated after mutation
               <Badge className="h-fit min-w-fit bg-success hover:bg-success/80 text-success-foreground">已驗證</Badge>
             ) : (
-              <FcuVerifyButton />
+              userId === "me" && <FcuVerifyButton />
             )}
           </CardHeader>
 

@@ -1,7 +1,8 @@
 import { z } from "zod";
+import { userIdOrMe, yearNumber } from "./utils";
 
 export const userIdInput = z.object({
-  userId: z.string().cuid().or(z.literal("me")),
+  userId: userIdOrMe,
 });
 
 export const profileFormSchema = z.object({
@@ -9,7 +10,7 @@ export const profileFormSchema = z.object({
 });
 
 export const updateProfileInput = profileFormSchema.extend({
-  userId: z.string().cuid().or(z.literal("me")),
+  userId: userIdOrMe,
 });
 
 export const studentDataFormSchema = z.object({
@@ -22,11 +23,11 @@ export const studentDataFormSchema = z.object({
 });
 
 export const updateStudentDataInput = studentDataFormSchema.extend({
-  userId: z.string().cuid().or(z.literal("me")),
+  userId: userIdOrMe,
 });
 
 export const getStatusByIdInput = userIdInput.extend({
-  year: z.number().int().min(2013).max(new Date().getFullYear()).optional(),
+  year: yearNumber.optional(),
 });
 
 export const getCodeByIdInput = userIdInput.extend({
@@ -36,4 +37,11 @@ export const getCodeByIdInput = userIdInput.extend({
 export const verifyCodeInput = z.object({
   code: z.string().min(9),
   aud: z.string().optional(),
+});
+
+export const getAllMembersInput = z.object({
+  year: yearNumber.optional(),
+  active: z.boolean().optional(),
+  suspended: z.boolean().optional(),
+  search: z.string().optional(),
 });

@@ -1,4 +1,15 @@
-import { Menu, User, CreditCard, LogOut, CalendarSearch, FileSignature, Users, UserCheck, UserX } from "lucide-react";
+import {
+  Menu,
+  User,
+  CreditCard,
+  LogOut,
+  CalendarSearch,
+  FileSignature,
+  Users,
+  UserCheck,
+  UserX,
+  Scan,
+} from "lucide-react";
 import Image, { ImageProps } from "next/image";
 
 type LogoProps = Omit<ImageProps, "src" | "alt">;
@@ -18,6 +29,7 @@ const Icons = {
   Users,
   UserCheck,
   UserX,
+  Scan,
 };
 
 export default Icons;

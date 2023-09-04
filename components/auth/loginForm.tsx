@@ -46,6 +46,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ providers, callbackUrl }) => {
           <Link href="/privacy" className="underline">
             個資聲明
           </Link>
+          。
         </p>
       </CardFooter>
     </Card>

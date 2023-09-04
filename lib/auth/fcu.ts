@@ -65,8 +65,8 @@ export default function Fcu<P extends FcuProfile>(options: OAuthUserConfig<P>): 
       } as User;
     },
     style: {
-      logo: "../../static/vendors/fcu-nid.png",
-      logoDark: "../../static/vendors/fcu-nid.png",
+      logo: "/fcu-nid.png",
+      logoDark: "/fcu-nid.png",
       bgDark: "#fff",
       bg: "#fff",
       text: "#000",

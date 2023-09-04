@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/command";
 import { api } from "@/lib/trpc/client";
 import { cn } from "@/lib/utils";
+import { useDebounce } from "@/lib/client-utils";
 
 type DashboardSearchProps = {
   open: boolean;
@@ -102,23 +103,3 @@ const DashboardSearch: React.FC<DashboardSearchProps> = ({ search, open, onOpenC
 };
 
 export default DashboardSearch;
-
-/**
- * Delay the execution of function or state update with useDebounce.
- * @see https://usehooks.com/usedebounce
- */
-const useDebounce = (value: any, delay: number) => {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
-};

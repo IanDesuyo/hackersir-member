@@ -49,9 +49,6 @@ export const authOptions: NextAuthOptions = {
         await updateFcuStudentData(user.id, profile as FcuProfile);
       }
 
-      // Update user image
-      user.image = profile?.image;
-
       return true;
     },
     session: async ({ session, user }) => {
@@ -64,6 +61,7 @@ export const authOptions: NextAuthOptions = {
     },
   },
   pages: {
+    signIn: "/login",
     newUser: "/join",
   },
 };

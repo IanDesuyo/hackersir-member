@@ -1,5 +1,6 @@
 import { z } from "zod";
+import { userIdOrMe } from "./utils";
 
 export const userIdInput = z.object({
-  userId: z.string().cuid().or(z.literal("me")),
+  userId: userIdOrMe,
 });
