@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { userIdOrMe, yearNumber } from "./utils";
+import { userId, userIdOrMe, yearNumber } from "./utils";
 
 export const userIdInput = z.object({
   userId: userIdOrMe,
@@ -41,7 +41,14 @@ export const verifyCodeInput = z.object({
 
 export const getAllMembersInput = z.object({
   year: yearNumber.optional(),
+  status: z.enum(["all", "active", "inactive", "suspended"]).optional(),
+  query: z.string().optional(),
+});
+
+export const updateMemberStatusInput = z.object({
+  userId: userId,
+  year: yearNumber.optional(),
   active: z.boolean().optional(),
   suspended: z.boolean().optional(),
-  search: z.string().optional(),
+  sendEmail: z.boolean().optional(),
 });

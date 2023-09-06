@@ -1,7 +1,14 @@
-import { createTRPCRouter, authenticatedProcedure, adminReadProcedure, convertMeToUserId } from "..";
+import {
+  createTRPCRouter,
+  authenticatedProcedure,
+  adminReadProcedure,
+  convertMeToUserId,
+  adminWriteProcedure,
+} from "..";
 import { authProviders } from "@/lib/auth";
 import * as schema from "@/lib/schemas/member";
 import type { Prisma } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
 import { randomBytes } from "crypto";
 import { SignJWT, jwtVerify, base64url } from "jose";
 
@@ -164,5 +171,122 @@ export const memberRouter = createTRPCRouter({
       console.error(e);
       return { success: false };
     }
+  }),
+
+  // TODO: add pagination
+  getAllMembers: adminReadProcedure.input(schema.getAllMembersInput).query(async ({ ctx, input }) => {
+    const { year: _year, status, query } = input;
+    let year = _year as number;
+
+    if (!year) {
+      year = await ctx.prisma.setting
+        .findUniqueOrThrow({
+          where: { id: "current_year" },
+        })
+        .then(setting => parseInt(setting.value));
+    }
+
+    const where = {
+      year,
+      ...(status === "active" && { active: true, suspended: false }),
+      ...(status === "inactive" && { active: false }),
+      ...(status === "suspended" && { suspended: true }),
+      ...(query && {
+        OR: [
+          { userId: { contains: query } },
+          { user: { studentInfo: { realname: { contains: query } } } },
+          { user: { studentInfo: { studentId: { contains: query } } } },
+        ],
+      }),
+    } as Prisma.MemberDataWhereInput;
+
+    const _members = await ctx.prisma.memberData.findMany({
+      where,
+      select: {
+        userId: true,
+        active: true,
+        suspended: true,
+        coins: true,
+        receipt: {
+          select: {
+            amount: true,
+            paidAt: true,
+            isCompleted: true,
+          },
+        },
+        user: {
+          select: {
+            studentInfo: true,
+          },
+        },
+      },
+    });
+
+    // TODO: fix typing
+    const members = _members.map(member => ({
+      ...member,
+      studentInfo: member.user.studentInfo,
+      user: undefined,
+    }));
+
+    return members;
+  }),
+
+  updateMemberStatus: adminWriteProcedure.input(schema.updateMemberStatusInput).mutation(async ({ ctx, input }) => {
+    const { userId, year: _year, active, suspended, sendEmail } = input;
+    let year = _year as number;
+
+    if (!year) {
+      year = await ctx.prisma.setting
+        .findUniqueOrThrow({
+          where: { id: "current_year" },
+        })
+        .then(setting => parseInt(setting.value));
+    }
+
+    // Check user exists and is a member
+    const existMember = await ctx.prisma.memberData.findUnique({
+      where: { userId_year: { userId, year } },
+      select: { active, suspended },
+    });
+
+    if (!existMember) {
+      throw new TRPCError({ code: "BAD_REQUEST", message: "User does not have member data" });
+    }
+
+    // Update status
+    const member = await ctx.prisma.memberData.update({
+      where: { userId_year: { userId, year } },
+      data: { active, suspended },
+      select: {
+        userId: true,
+        active: true,
+        suspended: true,
+        receipt: true,
+        updatedAt: true,
+      },
+    });
+
+    // Update receipt
+    if (member.receipt && !member.receipt.isCompleted) {
+      const receipt = await ctx.prisma.receipt.update({
+        where: { id: member.receipt.id },
+        data: { paidAt: new Date(), isCompleted: active },
+      });
+
+      // Send email
+      if (sendEmail) {
+        const user = await ctx.prisma.user.findUnique({
+          where: { id: member.userId },
+          select: { email: true, studentInfo: { select: { realname: true } } },
+        });
+
+        if (!user?.studentInfo) {
+          throw new TRPCError({ code: "BAD_REQUEST", message: "User does not have studentInfo" });
+        }
+      }
+    }
+
+    return { success: !!member, userId: member.userId, updatedAt: member.updatedAt };
   }),
 });
