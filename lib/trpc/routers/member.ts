@@ -9,6 +9,7 @@ import { authProviders } from "@/lib/auth";
 import * as schema from "@/lib/schemas/member";
 import type { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
+import onMemberJoined from "@/lib/email/templates/onMemberJoined";
 import { randomBytes } from "crypto";
 import { SignJWT, jwtVerify, base64url } from "jose";
 
@@ -284,6 +285,8 @@ export const memberRouter = createTRPCRouter({
         if (!user?.studentInfo) {
           throw new TRPCError({ code: "BAD_REQUEST", message: "User does not have studentInfo" });
         }
+
+        onMemberJoined({ name: user.studentInfo.realname, receipt, email: user.email });
       }
     }
 

@@ -1,10 +1,10 @@
 import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, publicProcedure, authenticatedProcedure } from "..";
 import * as schema from "@/lib/schemas/join";
+import onApplyMember from "@/lib/email/templates/onApplyMember";
 
 export const joinRouter = createTRPCRouter({
   getDetails: publicProcedure.query(async ({ ctx }) => {
-    console.log("getDetails");
 
     const settings = await ctx.prisma.$transaction(
       ["applicable", "current_year", "member_vaild_until", "club_fee", "president"].map(id =>
@@ -87,6 +87,7 @@ export const joinRouter = createTRPCRouter({
       where: {
         userId: ctx.session.user.id,
       },
+      select: { realname: true },
     });
 
     if (!studentData) {
@@ -120,6 +121,8 @@ export const joinRouter = createTRPCRouter({
 
       return memberData;
     });
+
+    onApplyMember({ name: studentData.realname, email: ctx.session.user.email });
 
     return { success: !!memberData, userId: memberData.userId, updatedAt: memberData.updatedAt };
   }),
