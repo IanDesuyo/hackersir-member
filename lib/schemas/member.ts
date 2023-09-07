@@ -45,6 +45,12 @@ export const getAllMembersInput = z.object({
   query: z.string().optional(),
 });
 
+export const memberStatusFormSchema = z.object({
+  active: z.boolean().optional(),
+  suspended: z.boolean().optional(),
+  sendEmail: z.boolean().optional(),
+});
+
 export const updateMemberStatusInput = z.object({
   userId: userId,
   year: yearNumber.optional(),

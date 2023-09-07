@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { EditMemberStatusButton } from "./actions";
 export type Member = NonNullable<RouterOutputs["member"]["getAllMembers"][0]>;
 
 export const columns: ColumnDef<Member>[] = [
@@ -62,12 +63,18 @@ export const columns: ColumnDef<Member>[] = [
     accessorKey: "actions",
     header: "操作",
     cell: ({ row }) => {
+      const {
+        userId,
+        studentInfo: { realname },
+        active,
+        suspended,
+      } = row.original;
       return (
         <div className="flex gap-2 justify-end">
-          <Link href={`/members/${row.original.userId}/profile`}>
+          <Link href={`/members/${userId}/profile`}>
             <Button variant="outline">編輯</Button>
           </Link>
-          <Button>更改資格</Button>
+          <EditMemberStatusButton userId={userId} name={realname} status={{ active, suspended }} />
         </div>
       );
     },

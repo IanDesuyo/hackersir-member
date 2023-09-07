@@ -233,7 +233,7 @@ export const memberRouter = createTRPCRouter({
     return members;
   }),
 
-  updateMemberStatus: adminWriteProcedure.input(schema.updateMemberStatusInput).mutation(async ({ ctx, input }) => {
+  updateMemberStatusById: adminWriteProcedure.input(schema.updateMemberStatusInput).mutation(async ({ ctx, input }) => {
     const { userId, year: _year, active, suspended, sendEmail } = input;
     let year = _year as number;
 
@@ -246,12 +246,14 @@ export const memberRouter = createTRPCRouter({
     }
 
     // Check user exists and is a member
-    const existMember = await ctx.prisma.memberData.findUnique({
-      where: { userId_year: { userId, year } },
-      select: { active, suspended },
+    const memberExist = await ctx.prisma.memberData.count({
+      where: {
+        userId,
+        year,
+      },
     });
 
-    if (!existMember) {
+    if (memberExist !== 1) {
       throw new TRPCError({ code: "BAD_REQUEST", message: "User does not have member data" });
     }
 
@@ -275,18 +277,23 @@ export const memberRouter = createTRPCRouter({
         data: { paidAt: new Date(), isCompleted: active },
       });
 
-      // Send email
-      if (sendEmail) {
+      // Send onMemberJoined email
+      if (member.active && sendEmail) {
         const user = await ctx.prisma.user.findUnique({
           where: { id: member.userId },
-          select: { email: true, studentInfo: { select: { realname: true } } },
+          select: { email: true, studentInfo: { select: { realname: true, studentId: true } } },
         });
 
         if (!user?.studentInfo) {
           throw new TRPCError({ code: "BAD_REQUEST", message: "User does not have studentInfo" });
         }
 
-        onMemberJoined({ name: user.studentInfo.realname, receipt, email: user.email });
+        onMemberJoined({
+          name: user.studentInfo.realname,
+          studentId: user.studentInfo.studentId,
+          receipt,
+          email: user.email,
+        });
       }
     }
 

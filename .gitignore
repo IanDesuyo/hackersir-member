@@ -8,12 +8,17 @@
 # testing
 /coverage
 
-# next.js
-/.next/
-/out/
+# development
+db.sqlite
+/receipt/
+lib/email/templates/assets
 
 # production
 /build
+
+# next.js
+/.next/
+/out/
 
 # misc
 .DS_Store
@@ -34,5 +39,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-db.sqlite

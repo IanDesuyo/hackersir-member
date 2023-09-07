@@ -21,6 +21,6 @@ export const sendEmail = async (options: SendMailOptions) => {
       console.error(err);
     }
 
-    console.log(options.subject, info.accepted, info.rejected);
+    console.log("[Email]", options.subject, { accepted: info.accepted, rejected: info.rejected });
   });
 };

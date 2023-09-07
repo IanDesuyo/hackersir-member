@@ -19,6 +19,7 @@
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-select": "^1.2.2",
     "@radix-ui/react-slot": "^1.0.2",
+    "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-toast": "^1.1.4",
     "@t3-oss/env-nextjs": "^0.6.1",
     "@tanstack/react-query": "^4.33.0",
@@ -36,12 +37,14 @@
     "cmdk": "^0.2.0",
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.12",
+    "iconv-lite": "^0.6.3",
     "jose": "^4.14.6",
     "jotai": "^2.4.1",
     "lucide-react": "^0.274.0",
     "next": "13.4.19",
     "next-auth": "^4.23.1",
     "nodemailer": "^6.9.4",
+    "pdfkit": "^0.13.0",
     "postcss": "8.4.27",
     "qrcode.react": "^3.1.0",
     "react": "18.2.0",
@@ -57,6 +60,7 @@
   "devDependencies": {
     "@types/canvas-confetti": "^1.6.0",
     "@types/nodemailer": "^6.4.9",
+    "@types/pdfkit": "^0.12.10",
     "prisma": "^5.2.0"
   }
 }
