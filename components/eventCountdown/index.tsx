@@ -1,24 +1,23 @@
 import { getApi } from "@/lib/trpc/root";
-import { type CSSProperties } from "react";
 import { Terminal, TerminalLine } from "../terminal";
 import { TimeCountdown } from "./client-components";
 import Link from "next/link";
 
 type EventCountdownProps = {
-  id: string;
+  eventId: string;
 };
 
-export default async function EventCountdown({ id }: EventCountdownProps) {
+export default async function EventCountdown({ eventId }: EventCountdownProps) {
   const api = await getApi();
 
-  const event = await api.event.getById(id);
+  const event = await api.event.getById({ eventId });
 
   if (!event) {
     return (
       <Terminal>
-        <TerminalLine>cat events/{id}</TerminalLine>
+        <TerminalLine>cat events/{eventId}</TerminalLine>
         <TerminalLine noPrompt className="text-red-500">
-          cat: events/{id}: No such file or directory
+          cat: events/{eventId}: No such file or directory
         </TerminalLine>
       </Terminal>
     );

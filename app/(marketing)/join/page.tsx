@@ -33,7 +33,7 @@ export default async function JoinPage() {
       <JoinNotice />
 
       <Steps />
-      <EventCountdown id="welcome-party" />
+      <EventCountdown eventId="welcome-party" />
     </div>
   );
 }

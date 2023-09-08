@@ -5,15 +5,17 @@ import { memberRouter } from "./routers/member";
 import { eventRouter } from "./routers/event";
 import { joinRouter } from "./routers/join";
 import { receiptRouter } from "./routers/receipt";
+import { signinRouter } from "./routers/signin";
+import { dashboardRouter } from "./routers/dashboard";
 import { cache } from "react";
 import { prisma } from "@/lib/db";
-import { dashboardRouter } from "./routers/dashboard";
 
 export const appRouter = createTRPCRouter({
   member: memberRouter,
   event: eventRouter,
   join: joinRouter,
   receipt: receiptRouter,
+  signin: signinRouter,
   dashboard: dashboardRouter,
 });
 

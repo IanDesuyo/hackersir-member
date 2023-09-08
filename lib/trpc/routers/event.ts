@@ -1,12 +1,12 @@
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "..";
+import { adminWriteProcedure, createTRPCRouter, publicProcedure } from "..";
 import * as schema from "@/lib/schemas/event";
 
 export const eventRouter = createTRPCRouter({
-  getById: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
+  getById: publicProcedure.input(schema.eventIdInput).query(async ({ ctx, input }) => {
     const event = await ctx.prisma.event.findUnique({
       where: {
-        id: input,
+        id: input.eventId,
       },
     });
 
@@ -29,5 +29,24 @@ export const eventRouter = createTRPCRouter({
     });
 
     return events;
+  }),
+
+  updateById: adminWriteProcedure.input(schema.updateByIdInput).mutation(async ({ ctx, input }) => {
+    const { eventId, ...rest } = input;
+
+    const event = await ctx.prisma.event.update({
+      where: {
+        id: eventId,
+      },
+      data: {
+        ...rest,
+      },
+      select: {
+        id: true,
+        updatedAt: true,
+      },
+    });
+
+    return { success: !!event, eventId: event.id, updatedAt: event.updatedAt };
   }),
 });

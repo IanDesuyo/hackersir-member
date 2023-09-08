@@ -53,7 +53,7 @@ export const columns: ColumnDef<Member>[] = [
             </div>
           </HoverCardTrigger>
           <HoverCardContent>
-            <p>繳費時間：{paidAt || "無"}</p>
+            <p>繳費時間：{paidAt.toLocaleString("zh-TW") || "無"}</p>
           </HoverCardContent>
         </HoverCard>
       );
