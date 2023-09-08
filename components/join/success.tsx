@@ -63,7 +63,7 @@ const JoinSuccess: React.FC = async () => {
         忘記注意事項了嗎? 點我!
       </label>
 
-      <EventCountdown id="welcome-party" />
+      <EventCountdown eventId="welcome-party" />
 
       <JoinNotice id="join-notice" defaultClose />
     </div>
