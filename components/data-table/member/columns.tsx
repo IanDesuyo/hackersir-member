@@ -15,7 +15,7 @@ export const columns: ColumnDef<Member>[] = [
     header: "姓名",
     cell: ({ row }) => {
       const { active, suspended } = row.original;
-      const { realname } = row.original.studentInfo; // TODO: fix typing
+      const { realname } = row.original.studentInfo;
 
       return (
         <div className="flex gap-2 items-center">
@@ -42,7 +42,7 @@ export const columns: ColumnDef<Member>[] = [
     accessorKey: "receipt",
     header: "繳費狀態",
     cell: ({ row }) => {
-      const { amount, paidAt, isCompleted } = row.original.receipt; // TODO: fix typing
+      const { amount, paidAt, isCompleted } = row.original.receipt;
 
       return (
         <HoverCard>
@@ -53,7 +53,7 @@ export const columns: ColumnDef<Member>[] = [
             </div>
           </HoverCardTrigger>
           <HoverCardContent>
-            <p>繳費時間：{paidAt.toLocaleString("zh-TW") || "無"}</p>
+            <p>繳費時間：{paidAt?.toLocaleString("zh-TW") || "無"}</p>
           </HoverCardContent>
         </HoverCard>
       );

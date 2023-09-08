@@ -223,10 +223,10 @@ export const memberRouter = createTRPCRouter({
       },
     });
 
-    // TODO: fix typing
     const members = _members.map(member => ({
       ...member,
-      studentInfo: member.user.studentInfo,
+      receipt: member.receipt as NonNullable<typeof member.receipt>,
+      studentInfo: member.user.studentInfo as NonNullable<typeof member.user.studentInfo>, // Already checked when join.apply
       user: undefined,
     }));
 
