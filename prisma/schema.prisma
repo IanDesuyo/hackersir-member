@@ -1,0 +1,150 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Necessary for Next auth
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? // @db.Text 
+  access_token      String? // @db.Text
+  expires_at        BigInt?
+  token_type        String?
+  scope             String?
+  id_token          String? // @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String       @id @default(cuid())
+  name          String
+  email         String       @unique
+  emailVerified DateTime?
+  image         String?
+  permission    Int          @default(1)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now()) @updatedAt
+  accounts      Account[]
+  sessions      Session[]
+  studentInfo   StudentData?
+  signins       SignIn[]
+  memberData    MemberData[]
+  Receipt       Receipt[]
+}
+
+// 學生資料
+// 存放學生的學校、系所、科系、班級、姓名、學號等資料
+model StudentData {
+  userId     String   @id
+  isVerified Boolean  @default(false)
+  school     String // 逢甲大學
+  realname   String
+  studentId  String
+  eduEmail   String?
+  department String // 資電學院
+  major      String // 資訊工程系
+  class      String
+  updatedAt  DateTime @default(now()) @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([school, studentId])
+  @@map("StudentInfo")
+}
+
+// 社員資料
+// 每位 user 於每年度只能有一筆資料
+model MemberData {
+  id        String   @id @default(cuid())
+  userId    String
+  year      Int
+  active    Boolean  @default(false)
+  suspended Boolean  @default(false)
+  coins     Int      @default(0)
+  receiptId String?  @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  receipt   Receipt? @relation(fields: [receiptId], references: [id], onDelete: SetNull)
+
+  @@unique([userId, year])
+  @@index([userId, year])
+}
+
+// 收據
+model Receipt {
+  id          String      @id @default(cuid())
+  userId      String
+  title       String
+  description String?
+  amount      Int
+  bankLast5   String? // 匯款銀行後五碼, null 表示現金
+  paidAt      DateTime? // 設定時寄送 email
+  isCompleted Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @default(now()) @updatedAt
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  MemberData  MemberData?
+}
+
+// 活動資料
+model Event {
+  id                  String   @id @default(cuid())
+  name                String // 活動名稱
+  description         String? // 活動簡介
+  type                String // 活動類型
+  venue               String? // 活動地點
+  links               String? // 活動連結 TODO: array
+  lecturer            String? // 講師
+  lecturerDescription String? // 講師簡介
+  lecturerImage       String? // 講師照片
+  lecturerLink        String? // 講師連結
+  startAt             DateTime // 活動開始時間
+  endAt               DateTime // 活動結束時間
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @default(now()) @updatedAt
+  signins             SignIn[]
+}
+
+// 簽到紀錄
+model SignIn {
+  id        String    @id @default(uuid())
+  userId    String
+  eventId   String
+  isOnline  Boolean   @default(false) // 線上簽到
+  signinAt  DateTime  @default(now()) // 簽到時間
+  signoutAt DateTime? // 簽退時間
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, eventId])
+  @@index([userId])
+  @@index([eventId])
+}
+
+// 系統設定
+model Setting {
+  id          String   @id @default(cuid())
+  value       String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+}

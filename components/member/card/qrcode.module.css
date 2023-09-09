@@ -1,0 +1,41 @@
+@property --percentage {
+  initial-value: 100%;
+  inherits: false;
+  syntax: "<percentage>";
+}
+
+@property --delay {
+  initial-value: 5s; /* 3 minutes - 15 seconds */
+  inherits: false;
+  syntax: "<delay>";
+}
+
+@property --color {
+  initial-value: white;
+  inherits: false;
+  syntax: "<color>";
+}
+
+.timeout {
+  background: conic-gradient(var(--color) var(--percentage), white 0);
+  animation: timer 15s linear var(--delay);
+}
+
+@keyframes timer {
+  0% {
+    --percentage: 100%;
+    --color: white;
+  }
+  33% {
+    /* last 10 seconds */
+    --percentage: 100%;
+    --color: theme(colors.yellow.300);
+  }
+  90% {
+    --color: theme(colors.red.500);
+  }
+  100% {
+    --color: theme(colors.red.500);
+    --percentage: 0%;
+  }
+}
