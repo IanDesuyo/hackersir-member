@@ -21,15 +21,17 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
     return redirect(callbackUrl || "/");
   }
 
-  const providers = authProviders.map(({ id, name, style }) => ({
-    id,
-    provider: name,
-    logo: style?.logo,
-    style: {
-      color: style?.textDark,
-      backgroundColor: style?.bgDark,
-    },
-  }));
+  const providers = authProviders
+    .filter(({ id }) => id !== "fcu-nid")
+    .map(({ id, name, style }) => ({
+      id,
+      provider: name,
+      logo: style?.logo,
+      style: {
+        color: style?.textDark,
+        backgroundColor: style?.bgDark,
+      },
+    }));
 
   const error = searchParams.error as string | undefined;
 

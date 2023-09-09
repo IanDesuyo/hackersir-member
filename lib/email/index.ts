@@ -10,6 +10,7 @@ transporter.verify(function (error, success) {
 });
 
 export const sendEmail = async (options: SendMailOptions) => {
+  console.log("[Email] Sending", options.subject, options.to);
   options.from = {
     name: env.SMTP_NAME,
     address: env.SMTP_FROM,
@@ -21,6 +22,6 @@ export const sendEmail = async (options: SendMailOptions) => {
       console.error(err);
     }
 
-    console.log("[Email]", options.subject, { accepted: info.accepted, rejected: info.rejected });
+    console.log("[Email] Sent", info.response, { accepted: info.accepted, rejected: info.rejected });
   });
 };
