@@ -51,7 +51,7 @@ const enforceUserhasAdminRead = t.middleware(({ ctx, next }) => {
 export const adminReadProcedure = t.procedure.use(enforceUserIsAuthed).use(enforceUserhasAdminRead);
 
 const enforceUserHasAdminWrite = t.middleware(({ ctx, next }) => {
-  if (hasPermissions(ctx.session, [Permission.AdminWrite])) {
+  if (!hasPermissions(ctx.session, [Permission.AdminWrite])) {
     throw new TRPCError({ code: "FORBIDDEN" });
   }
 

@@ -30,6 +30,7 @@ export const receiptRouter = createTRPCRouter({
         where: {
           userId: input.userId,
         },
+        orderBy: { createdAt: "desc" },
       });
 
       return receipts;
