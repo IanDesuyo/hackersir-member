@@ -7,6 +7,8 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/h
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { EditMemberStatusButton } from "./actions";
+import { cn } from "@/lib/utils";
+import Icons from "@/components/icons";
 export type Member = NonNullable<RouterOutputs["member"]["getAllMembers"][0]>;
 
 export const columns: ColumnDef<Member>[] = [
@@ -29,6 +31,16 @@ export const columns: ColumnDef<Member>[] = [
   {
     accessorKey: "studentInfo.school",
     header: "學校",
+    cell: ({ row }) => {
+      const { school, isVerified } = row.original.studentInfo;
+
+      return (
+        <div className="flex gap-2">
+          {isVerified && <Icons.Verified />}
+          <p>{school}</p>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "studentInfo.major",
@@ -48,6 +60,7 @@ export const columns: ColumnDef<Member>[] = [
         <HoverCard>
           <HoverCardTrigger>
             <div className="flex gap-2">
+              {isCompleted ? <Icons.Verified /> : <Icons.NotVerified />}
               <p>{isCompleted ? "已繳費" : "未繳費"}</p>
               <p>{amount} 元</p>
             </div>

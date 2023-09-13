@@ -203,6 +203,7 @@ export const memberRouter = createTRPCRouter({
 
     const _members = await ctx.prisma.memberData.findMany({
       where,
+      orderBy: { createdAt: "asc" },
       select: {
         userId: true,
         active: true,

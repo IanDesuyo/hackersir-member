@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { CardQrCode } from "./client-components";
 import { getServerSession } from "@/lib/auth";
+import { getApi } from "@/lib/trpc/root";
 
 type MemberCardProps = {
   userId: string;
@@ -9,6 +10,9 @@ type MemberCardProps = {
 
 const MemberCard: React.FC<MemberCardProps> = async ({ userId }) => {
   const session = await getServerSession();
+
+  const api = await getApi();
+  const studentData = await api.member.getStudentDataById({ userId });
 
   return (
     <Card className="w-fit">
@@ -23,6 +27,16 @@ const MemberCard: React.FC<MemberCardProps> = async ({ userId }) => {
       <CardContent>
         <CardQrCode userId={userId} />
       </CardContent>
+
+      {studentData && (
+        <CardFooter className="flex gap-1 flex-col items-start">
+          <p className="text-xl">{studentData.realname}</p>
+          <p>
+            {studentData.school} {studentData.major}
+          </p>
+          <p>{studentData.studentId}</p>
+        </CardFooter>
+      )}
     </Card>
   );
 };

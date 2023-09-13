@@ -10,6 +10,7 @@ export const signinRouter = createTRPCRouter({
         where: {
           userId: input.userId,
         },
+        orderBy: { signinAt: "desc" },
         select: {
           id: true,
           isOnline: true,
@@ -33,6 +34,7 @@ export const signinRouter = createTRPCRouter({
       where: {
         eventId: input.eventId,
       },
+      orderBy: { signinAt: "desc" },
       select: {
         id: true,
         isOnline: true,
