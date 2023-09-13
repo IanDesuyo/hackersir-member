@@ -17,7 +17,7 @@ const DefaultLayout: React.FC<LayoutProps> = async ({ children }) => {
           {hasPermissions(session, [Permission.AdminRead]) && <NavItem href="/dashboard">管理員後台</NavItem>}
         </Nav>
       </header>
-      <div className="container pt-4">{children}</div>
+      <div className="container pt-4 mb-4">{children}</div>
     </div>
   );
 };

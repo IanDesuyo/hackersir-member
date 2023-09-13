@@ -5,7 +5,6 @@ import onApplyMember from "@/lib/email/templates/onApplyMember";
 
 export const joinRouter = createTRPCRouter({
   getDetails: publicProcedure.query(async ({ ctx }) => {
-
     const settings = await ctx.prisma.$transaction(
       ["applicable", "current_year", "member_vaild_until", "club_fee", "president"].map(id =>
         ctx.prisma.setting.findUniqueOrThrow({
@@ -87,19 +86,21 @@ export const joinRouter = createTRPCRouter({
       where: {
         userId: ctx.session.user.id,
       },
-      select: { realname: true },
+      select: { realname: true, isVerified: true },
     });
 
     if (!studentData) {
       throw new TRPCError({ code: "BAD_REQUEST", message: "User has no student data" });
     }
 
+    const amount = studentData.isVerified ? clubFee : clubFee + 50;
+
     const memberData = await ctx.prisma.$transaction(async prisma => {
       const receipt = await prisma.receipt.create({
         data: {
           userId: ctx.session.user.id,
           title: `${currentYear} 社費`,
-          amount: clubFee,
+          amount,
           bankLast5: input.paymentMethod === "bank_transfer" ? input.bankLast5 : null,
         },
         select: {

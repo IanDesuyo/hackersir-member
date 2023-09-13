@@ -9,6 +9,8 @@ import {
   UserCheck,
   UserX,
   Scan,
+  BadgeCheck,
+  BadgeX,
 } from "lucide-react";
 import Image, { ImageProps } from "next/image";
 
@@ -30,6 +32,8 @@ const Icons = {
   UserCheck,
   UserX,
   Scan,
+  Verified: BadgeCheck,
+  NotVerified: BadgeX,
 };
 
 export default Icons;
