@@ -42,7 +42,7 @@ export const columns: ColumnDef<Member>[] = [
     accessorKey: "receipt",
     header: "繳費狀態",
     cell: ({ row }) => {
-      const { amount, paidAt, isCompleted } = row.original.receipt;
+      const { amount, bankLast5, paidAt, isCompleted } = row.original.receipt;
 
       return (
         <HoverCard>
@@ -53,7 +53,8 @@ export const columns: ColumnDef<Member>[] = [
             </div>
           </HoverCardTrigger>
           <HoverCardContent>
-            <p>繳費時間：{paidAt?.toLocaleString("zh-TW") || "無"}</p>
+            <p>付款方式: {bankLast5 || "現金"}</p>
+            <p>付款時間: {paidAt ? paidAt.toLocaleString("zh-TW") : "未付款"}</p>
           </HoverCardContent>
         </HoverCard>
       );
