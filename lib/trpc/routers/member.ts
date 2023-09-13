@@ -211,6 +211,7 @@ export const memberRouter = createTRPCRouter({
         receipt: {
           select: {
             amount: true,
+            bankLast5: true,
             paidAt: true,
             isCompleted: true,
           },
@@ -265,7 +266,9 @@ export const memberRouter = createTRPCRouter({
         userId: true,
         active: true,
         suspended: true,
-        receipt: true,
+        receipt: {
+          select: { id: true, isCompleted: true },
+        },
         updatedAt: true,
       },
     });

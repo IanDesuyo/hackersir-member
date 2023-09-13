@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { memberStatusFormSchema } from "@/lib/schemas/member";
+import { useToast } from "@/components/ui/use-toast";
 
 type EditMemberStatusButtonProps = {
   userId: string;
@@ -28,6 +29,7 @@ type EditMemberStatusButtonProps = {
 
 export const EditMemberStatusButton: React.FC<EditMemberStatusButtonProps> = ({ userId, name, status }) => {
   const [isOpen, setOpen] = useState(false);
+  const { toast } = useToast();
   const form = useForm({
     resolver: zodResolver(memberStatusFormSchema),
     defaultValues: {
@@ -42,6 +44,11 @@ export const EditMemberStatusButton: React.FC<EditMemberStatusButtonProps> = ({ 
 
   const onSubmit = async (data: z.infer<typeof memberStatusFormSchema>) => {
     await memberStatusMutation.mutateAsync({ userId, ...data });
+
+    toast({
+      title: "成功",
+      description: `已更改${name}的資格`,
+    });
 
     queryContext.member.getAllMembers.invalidate();
     setOpen(false);

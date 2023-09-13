@@ -81,7 +81,7 @@ const generateReceipt = ({ name, studentId, receipt }: Omit<onMemberJoinedProps,
     .fontSize(12)
     .text("社員收執聯", 100, 165)
     .fontSize(10)
-    .text(`開立日期: ${receipt.updatedAt.toLocaleDateString("zh-TW")}`, 70, 160, { align: "right" })
+    .text(`開立日期: ${(receipt.paidAt || receipt.updatedAt).toLocaleDateString("zh-TW")}`, 70, 160, { align: "right" })
     .text(`收據編號: ${receipt.id}`, 70, 172, { align: "right" })
     .moveDown();
 
