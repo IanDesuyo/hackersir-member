@@ -3,6 +3,8 @@ import { Noto_Sans_TC } from "next/font/google";
 import { getServerSession } from "@/lib/auth";
 import AppProvider from "@/components/appProvider";
 import { Toaster } from "@/components/ui/toaster";
+import Script from "next/script";
+import { env } from "@/lib/env.mjs";
 
 import "./globals.css";
 
@@ -33,6 +35,16 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       <body className="dark">
         <AppProvider session={session}>{children}</AppProvider>
         <Toaster />
+        <Script src={`https://www.googletagmanager.com/gtag/js?id=${env.GA_TRACKING_ID}`} />
+        <Script id="google-analytics">
+          {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+ 
+          gtag('config', '${env.GA_TRACKING_ID}');
+          `}
+        </Script>
       </body>
     </html>
   );
