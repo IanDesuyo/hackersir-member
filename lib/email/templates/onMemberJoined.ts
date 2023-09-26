@@ -48,78 +48,90 @@ const pdfStamp1 = readFileSync("lib/email/templates/assets/s1.png");
 const pdfStamp2 = readFileSync("lib/email/templates/assets/s2.png");
 
 const generateReceipt = ({ name, studentId, receipt }: Omit<onMemberJoinedProps, "email">, file: Writable) => {
-  console.log("[PDF] Generating receipt", receipt.id);
-  const doc = new PDFDocument({
-    size: "A4",
-    margin: 50,
-    compress: true,
-    ownerPassword: "hackersir",
-    font: "lib/email/templates/assets/font.ttf",
-    permissions: {
-      modifying: false,
-      copying: false,
-    },
-  });
-  doc.once("end", () => {
-    console.log("[PDF] Receipt generated", receipt.id);
-  });
-  doc.pipe(file);
+  return new Promise<void>((resolve, reject) => {
+    console.log("[PDF] Generating receipt", receipt.id);
+    const doc = new PDFDocument({
+      size: "A4",
+      margin: 50,
+      compress: true,
+      ownerPassword: "hackersir",
+      font: "lib/email/templates/assets/font.ttf",
+      permissions: {
+        modifying: false,
+        copying: false,
+      },
+    });
 
-  doc
-    .fontSize(12)
-    .text("From:", 50, 50)
-    .text("To:", 50, 70)
-    .text("（407802）台中市西屯區文華路 100 號", 85, 50)
-    .text(name, 85, 70)
-    .image(pdfLogo, 400, 40, { width: 150 })
-    .moveDown();
+    doc.once("end", () => {
+      console.log("[PDF] Receipt generated", receipt.id);
+      resolve();
+    });
 
-  doc
-    .fillColor("#000000")
-    .fontSize(20)
-    .text("收據", 50, 160)
-    .fontSize(12)
-    .text("社員收執聯", 100, 165)
-    .fontSize(10)
-    .text(`開立日期: ${(receipt.paidAt || receipt.updatedAt).toLocaleDateString("zh-TW")}`, 70, 160, { align: "right" })
-    .text(`收據編號: ${receipt.id}`, 70, 172, { align: "right" })
-    .moveDown();
+    doc.once("error", err => {
+      console.error("[PDF] Error generating receipt", receipt.id, err);
+      reject(err);
+    });
 
-  for (const i of [185, 185 + 30, 185 + 150]) {
-    doc.strokeColor("#000000").lineWidth(1).moveTo(50, i).lineTo(550, i).stroke();
-  }
-  for (const i of [185 + 60, 185 + 90, 185 + 120]) {
-    doc.strokeColor("#000000").lineWidth(1).moveTo(50, i).lineTo(400, i).stroke();
-  }
+    doc.pipe(file);
 
-  for (const x of [50, 150, 400, 550]) {
     doc
-      .strokeColor("#000000")
-      .lineWidth(1)
-      .moveTo(x, 185)
-      .lineTo(x, 185 + 5 * 30)
-      .stroke();
-  }
+      .fontSize(12)
+      .text("From:", 50, 50)
+      .text("To:", 50, 70)
+      .text("（407802）台中市西屯區文華路 100 號", 85, 50)
+      .text(name, 85, 70)
+      .image(pdfLogo, 400, 40, { width: 150 })
+      .moveDown();
 
-  doc
-    .fontSize(12)
-    .text("姓名/抬頭", 60, 195)
-    .text("學號/統一編號", 60, 225)
-    .text("類別", 60, 255)
-    .text("金額", 60, 285)
-    .text("經辦人", 60, 315)
-    .text("社團簽章", 450, 195)
-    .text("未蓋印章者無效", 410, 315)
-    .fillColor("#000000")
-    .text(name, 160, 195)
-    .text(studentId, 160, 225)
-    .text(receipt.title, 160, 255)
-    .text(`新台幣 ${receipt.amount} 元整`, 160, 285)
-    .text("逢甲大學黑客社入社系統", 160, 315)
-    .image(pdfStamp1, 400, 220, { width: 120 })
-    .image(pdfStamp2, 500, 270, { width: 30 })
-    .fillColor("#cccccc")
-    .text("此處用印僅限本收據使用", 410, 280, {});
+    doc
+      .fillColor("#000000")
+      .fontSize(20)
+      .text("收據", 50, 160)
+      .fontSize(12)
+      .text("社員收執聯", 100, 165)
+      .fontSize(10)
+      .text(`開立日期: ${(receipt.paidAt || receipt.updatedAt).toLocaleDateString("zh-TW")}`, 70, 160, {
+        align: "right",
+      })
+      .text(`收據編號: ${receipt.id}`, 70, 172, { align: "right" })
+      .moveDown();
 
-  doc.end();
+    for (const i of [185, 185 + 30, 185 + 150]) {
+      doc.strokeColor("#000000").lineWidth(1).moveTo(50, i).lineTo(550, i).stroke();
+    }
+    for (const i of [185 + 60, 185 + 90, 185 + 120]) {
+      doc.strokeColor("#000000").lineWidth(1).moveTo(50, i).lineTo(400, i).stroke();
+    }
+
+    for (const x of [50, 150, 400, 550]) {
+      doc
+        .strokeColor("#000000")
+        .lineWidth(1)
+        .moveTo(x, 185)
+        .lineTo(x, 185 + 5 * 30)
+        .stroke();
+    }
+
+    doc
+      .fontSize(12)
+      .text("姓名/抬頭", 60, 195)
+      .text("學號/統一編號", 60, 225)
+      .text("類別", 60, 255)
+      .text("金額", 60, 285)
+      .text("經辦人", 60, 315)
+      .text("社團簽章", 450, 195)
+      .text("未蓋印章者無效", 410, 315)
+      .fillColor("#000000")
+      .text(name, 160, 195)
+      .text(studentId, 160, 225)
+      .text(receipt.title, 160, 255)
+      .text(`新台幣 ${receipt.amount} 元整`, 160, 285)
+      .text("逢甲大學黑客社入社系統", 160, 315)
+      .image(pdfStamp1, 400, 220, { width: 120 })
+      .image(pdfStamp2, 500, 270, { width: 30 })
+      .fillColor("#cccccc")
+      .text("此處用印僅限本收據使用", 410, 280, {});
+
+    doc.end();
+  });
 };
