@@ -14,7 +14,7 @@ const Steps: React.FC = async () => {
   const api = await getApi();
   let studentData = null;
   if (session) {
-    studentData = await api.member.getStudentDataById({ userId: "me" });
+    studentData = await api.studentData.getByUserId({ userId: "me" });
   }
 
   return (

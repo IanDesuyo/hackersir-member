@@ -1,6 +1,8 @@
 import { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 import { createTRPCRouter } from ".";
 import { getServerSession } from "../auth";
+import { profileRouter } from "./routers/profile";
+import { studentDataRouter } from "./routers/studentData";
 import { memberRouter } from "./routers/member";
 import { eventRouter } from "./routers/event";
 import { joinRouter } from "./routers/join";
@@ -12,6 +14,8 @@ import { cache } from "react";
 import { prisma } from "@/lib/db";
 
 export const appRouter = createTRPCRouter({
+  profile: profileRouter,
+  studentData: studentDataRouter,
   member: memberRouter,
   event: eventRouter,
   join: joinRouter,

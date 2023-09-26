@@ -23,7 +23,7 @@ type FormField<T> = {
 
 type StudentDataProps = {
   userId: "me" | string;
-  initialData: RouterOutputs["member"]["getStudentDataById"];
+  initialData: RouterOutputs["studentData"]["getByUserId"];
 };
 
 const StudentData: React.FC<StudentDataProps> = ({ userId, initialData }) => {
@@ -41,7 +41,7 @@ const StudentData: React.FC<StudentDataProps> = ({ userId, initialData }) => {
     { name: "class", label: "班級", placeholder: "資訊工程系一年級乙班", type: "text" },
   ];
 
-  const studentDataMutation = api.member.updateStudentDataById.useMutation();
+  const studentDataMutation = api.studentData.updateByUserId.useMutation();
 
   const onSubmit = (data: z.infer<typeof studentDataFormSchema>) => {
     return studentDataMutation.mutateAsync({ userId, ...data });

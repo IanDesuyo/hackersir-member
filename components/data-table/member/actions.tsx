@@ -40,7 +40,7 @@ export const EditMemberStatusButton: React.FC<EditMemberStatusButtonProps> = ({ 
   });
 
   const queryContext = api.useContext();
-  const memberStatusMutation = api.member.updateMemberStatusById.useMutation();
+  const memberStatusMutation = api.member.updateStatusByUserId.useMutation();
 
   const onSubmit = async (data: z.infer<typeof memberStatusFormSchema>) => {
     await memberStatusMutation.mutateAsync({ userId, ...data });
@@ -50,7 +50,7 @@ export const EditMemberStatusButton: React.FC<EditMemberStatusButtonProps> = ({ 
       description: `已更改${name}的資格`,
     });
 
-    queryContext.member.getAllMembers.invalidate();
+    queryContext.member.getAll.invalidate();
     setOpen(false);
   };
 

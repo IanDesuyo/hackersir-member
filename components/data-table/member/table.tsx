@@ -15,7 +15,7 @@ export const DashboardMemberTable: React.FC<DashboardMemberTableProps> = () => {
   const [queryState, setQuery] = useState("");
   const query = useDebounce(queryState, 500);
 
-  const { data, isLoading } = api.member.getAllMembers.useQuery(
+  const { data, isLoading } = api.member.getAll.useQuery(
     { status, query },
     {
       refetchOnWindowFocus: false,

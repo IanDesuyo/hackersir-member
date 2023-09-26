@@ -39,7 +39,7 @@ export const verifyCodeInput = z.object({
   aud: z.string().optional(),
 });
 
-export const getAllMembersInput = z.object({
+export const getAllInput = z.object({
   year: yearNumber.optional(),
   status: z.enum(["all", "active", "inactive", "suspended"]).optional(),
   query: z.string().optional(),
