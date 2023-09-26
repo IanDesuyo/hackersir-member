@@ -7,6 +7,7 @@ import { joinRouter } from "./routers/join";
 import { receiptRouter } from "./routers/receipt";
 import { signinRouter } from "./routers/signin";
 import { dashboardRouter } from "./routers/dashboard";
+import { settingRouter } from "./routers/setting";
 import { cache } from "react";
 import { prisma } from "@/lib/db";
 
@@ -17,6 +18,7 @@ export const appRouter = createTRPCRouter({
   receipt: receiptRouter,
   signin: signinRouter,
   dashboard: dashboardRouter,
+  setting: settingRouter,
 });
 
 export type AppRouter = typeof appRouter;

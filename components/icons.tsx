@@ -11,6 +11,7 @@ import {
   Scan,
   BadgeCheck,
   BadgeX,
+  RefreshCcw,
 } from "lucide-react";
 import Image, { ImageProps } from "next/image";
 
@@ -34,6 +35,7 @@ const Icons = {
   Scan,
   Verified: BadgeCheck,
   NotVerified: BadgeX,
+  Sync: RefreshCcw,
 };
 
 export default Icons;
