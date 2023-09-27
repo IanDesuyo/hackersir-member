@@ -14,8 +14,8 @@ export default async function MemberProfilePage({ params: { userId } }: { params
   const api = await getApi();
 
   const [profile, studentData, receipts, signin] = await Promise.all([
-    api.member.getProfileById({ userId }),
-    api.member.getStudentDataById({ userId }),
+    api.profile.getByUserId({ userId }),
+    api.studentData.getByUserId({ userId }),
     api.receipt.getByUserId({ userId }),
     api.signin.getByUserId({ userId }),
   ]);

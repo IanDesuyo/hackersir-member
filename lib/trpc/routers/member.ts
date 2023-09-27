@@ -5,7 +5,6 @@ import {
   convertMeToUserId,
   adminWriteProcedure,
 } from "..";
-import { authProviders } from "@/lib/auth";
 import * as schema from "@/lib/schemas/member";
 import type { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
@@ -18,107 +17,7 @@ import { env } from "@/lib/env.mjs";
 const JWT_SECRET = base64url.decode(env.NEXTAUTH_SECRET);
 
 export const memberRouter = createTRPCRouter({
-  getProfileById: authenticatedProcedure
-    .input(schema.userIdInput)
-    .use(convertMeToUserId)
-    .query(async ({ ctx, input }) => {
-      const user = await ctx.prisma.user.findUnique({
-        where: {
-          id: input.userId,
-        },
-        include: {
-          accounts: {
-            select: {
-              provider: true,
-            },
-          },
-        },
-      });
-
-      if (!user) {
-        return null;
-      }
-
-      const accounts = authProviders.map(({ id, name, style }) => ({
-        id,
-        provider: name,
-        style: {
-          color: style?.textDark,
-          backgroundColor: style?.bgDark,
-        },
-        connected: user.accounts.some(account => account.provider === id),
-      }));
-
-      return { ...user, accounts };
-    }),
-
-  updateProfileById: authenticatedProcedure
-    .input(schema.updateProfileInput)
-    .use(convertMeToUserId)
-    .mutation(async ({ ctx, input }) => {
-      const user = await ctx.prisma.user.update({
-        where: {
-          id: input.userId,
-        },
-        data: {
-          name: input.name,
-        },
-        select: {
-          id: true,
-          updatedAt: true,
-        },
-      });
-
-      return { success: !!user, userId: user.id, updatedAt: user.updatedAt };
-    }),
-
-  getStudentDataById: authenticatedProcedure
-    .input(schema.userIdInput)
-    .use(convertMeToUserId)
-    .query(async ({ ctx, input }) => {
-      const student = await ctx.prisma.studentData.findUnique({
-        where: {
-          userId: input.userId,
-        },
-      });
-
-      return student;
-    }),
-
-  updateStudentDataById: authenticatedProcedure
-    .input(schema.updateStudentDataInput)
-    .use(convertMeToUserId)
-    .mutation(async ({ ctx, input }) => {
-      const data = {
-        school: input.school,
-        realname: input.realname,
-        studentId: input.studentId,
-        department: input.department,
-        major: input.major,
-        class: input.class,
-        // Reset verification status
-        isVerified: false,
-      } satisfies Prisma.StudentDataUpdateInput;
-
-      const student = await ctx.prisma.studentData.upsert({
-        where: {
-          userId: input.userId,
-        },
-        update: data,
-        create: {
-          userId: input.userId,
-          ...data,
-        },
-        select: {
-          userId: true,
-          updatedAt: true,
-        },
-      });
-
-      return { success: !!student, userId: student.userId, updatedAt: student.updatedAt };
-    }),
-
-  getStatusById: authenticatedProcedure
+  getStatusByUserId: authenticatedProcedure
     .input(schema.getStatusByIdInput)
     .use(convertMeToUserId)
     .query(async ({ ctx, input }) => {
@@ -140,7 +39,7 @@ export const memberRouter = createTRPCRouter({
       return memberStatus ?? { year, active: false, suspended: false, coins: 0 };
     }),
 
-  getCodeById: authenticatedProcedure
+  getCodeByUserId: authenticatedProcedure
     .input(schema.getCodeByIdInput)
     .use(convertMeToUserId)
     .query(async ({ ctx, input }) => {
@@ -175,7 +74,7 @@ export const memberRouter = createTRPCRouter({
   }),
 
   // TODO: add pagination
-  getAllMembers: adminReadProcedure.input(schema.getAllMembersInput).query(async ({ ctx, input }) => {
+  getAll: adminReadProcedure.input(schema.getAllInput).query(async ({ ctx, input }) => {
     const { year: _year, status, query } = input;
     let year = _year as number;
 
@@ -235,7 +134,7 @@ export const memberRouter = createTRPCRouter({
     return members;
   }),
 
-  updateMemberStatusById: adminWriteProcedure.input(schema.updateMemberStatusInput).mutation(async ({ ctx, input }) => {
+  updateStatusByUserId: adminWriteProcedure.input(schema.updateMemberStatusInput).mutation(async ({ ctx, input }) => {
     const { userId, year: _year, active, suspended, sendEmail } = input;
     let year = _year as number;
 

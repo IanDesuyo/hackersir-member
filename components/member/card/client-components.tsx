@@ -11,7 +11,7 @@ type CardQrCodeProps = {
 };
 
 export const CardQrCode: React.FC<CardQrCodeProps> = ({ userId }) => {
-  const { data, isFetching, refetch } = api.member.getCodeById.useQuery(
+  const { data, isFetching, refetch } = api.member.getCodeByUserId.useQuery(
     { userId, aud: "card" },
     {
       refetchOnWindowFocus: false,

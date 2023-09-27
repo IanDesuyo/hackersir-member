@@ -17,7 +17,7 @@
 }
 
 .timeout {
-  background: conic-gradient(var(--color) var(--percentage), white 0);
+  background: conic-gradient(var(--color, white) var(--percentage, 100%), white 0);
   animation: timer 15s linear var(--delay);
 }
 

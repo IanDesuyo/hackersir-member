@@ -14,7 +14,7 @@ const Steps: React.FC = async () => {
   const api = await getApi();
   let studentData = null;
   if (session) {
-    studentData = await api.member.getStudentDataById({ userId: "me" });
+    studentData = await api.studentData.getByUserId({ userId: "me" });
   }
 
   return (
@@ -47,7 +47,7 @@ const Steps: React.FC = async () => {
               </Link>
               。
             </p>
-            <p>逢甲大學學生請使用 NID 驗證, 或依照下方選項選擇</p>
+            <p className="font-bold">逢甲大學學生請使用 NID 驗證</p>
             <div className="grid grid-cols-2 gap-2 mt-2">
               <FcuVerifyButton />
               <Link href="/members/me/profile#student-data">

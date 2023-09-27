@@ -9,7 +9,7 @@ import Link from "next/link";
 import { EditMemberStatusButton } from "./actions";
 import { cn } from "@/lib/utils";
 import Icons from "@/components/icons";
-export type Member = NonNullable<RouterOutputs["member"]["getAllMembers"][0]>;
+export type Member = NonNullable<RouterOutputs["member"]["getAll"][0]>;
 
 export const columns: ColumnDef<Member>[] = [
   {

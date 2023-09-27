@@ -12,7 +12,7 @@ const MemberCard: React.FC<MemberCardProps> = async ({ userId }) => {
   const session = await getServerSession();
 
   const api = await getApi();
-  const studentData = await api.member.getStudentDataById({ userId });
+  const studentData = await api.studentData.getByUserId({ userId });
 
   return (
     <Card className="w-fit">

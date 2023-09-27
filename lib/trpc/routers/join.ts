@@ -86,14 +86,16 @@ export const joinRouter = createTRPCRouter({
       where: {
         userId: ctx.session.user.id,
       },
-      select: { realname: true, isVerified: true },
+      select: { realname: true, school: true, isVerified: true },
     });
 
     if (!studentData) {
       throw new TRPCError({ code: "BAD_REQUEST", message: "User has no student data" });
     }
 
-    const amount = studentData.isVerified ? clubFee : clubFee + 50;
+    // Check user is fcu student or not
+    const isFcuStudent = studentData.isVerified || studentData.school === "逢甲大學";
+    const amount = isFcuStudent ? clubFee : clubFee + 50;
 
     const memberData = await ctx.prisma.$transaction(async prisma => {
       const receipt = await prisma.receipt.create({

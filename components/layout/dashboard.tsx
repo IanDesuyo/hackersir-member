@@ -24,9 +24,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     <div className="min-h-screen">
       <header className="sticky top-0 z-40 w-full border-b bg-background">
         <Nav title="管理員後台">
-          <NavItem href="/dashboard/announcements">入社頁面</NavItem>
           <NavItem href="/dashboard/members">社員管理</NavItem>
           <NavItem href="/dashboard/events">活動管理</NavItem>
+          <NavItem href="/dashboard/settings">系統設定</NavItem>
           <DashboardSearch open={open} onOpenChange={setOpen} search={["userId", "studentId", "realname"]} />
         </Nav>
       </header>
