@@ -95,14 +95,10 @@ export const addRoleToUser = async (userId: string, roleId: string) => {
 
   console.log("[Discord] Add role to user", userId, response.status, response.statusText);
 
-  if (!response.ok) {
-    throw new Error(`Failed to add role to user: ${response.statusText}`);
-  }
-
   const remaining = parseInt(response.headers.get("x-ratelimit-remaining") ?? "0");
   const reset = parseInt(response.headers.get("x-ratelimit-reset-after") ?? "0");
 
-  return { success: true, rateLimit: { remaining, reset } };
+  return { success: response.ok, rateLimit: { remaining, reset } };
 };
 
 /**
@@ -121,12 +117,8 @@ export const removeRoleFromUser = async (userId: string, roleId: string) => {
 
   console.log("[Discord] Remove role from user", userId, response.status, response.statusText);
 
-  if (!response.ok) {
-    throw new Error(`Failed to remove role from user: ${response.statusText}`);
-  }
-
   const remaining = parseInt(response.headers.get("x-ratelimit-remaining") ?? "0");
   const reset = parseInt(response.headers.get("x-ratelimit-reset-after") ?? "0");
 
-  return { success: true, rateLimit: { remaining, reset } };
+  return { success: response.ok, rateLimit: { remaining, reset } };
 };
